@@ -2,6 +2,7 @@ from collections.abc import AsyncGenerator
 
 from fastapi import APIRouter, Depends, HTTPException
 
+import api.services.llm_service as llm_service
 from api.models.entry import Entry, EntryCreate
 from api.repositories.postgres_repository import PostgresDB
 from api.services.entry_service import EntryService
@@ -145,4 +146,17 @@ async def analyze_entry(entry_id: str, entry_service: EntryService = Depends(get
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
     """
-    raise HTTPException(status_code=501, detail="Implement this endpoint - see Learn to Cloud curriculum")
+    entry = await entry_service.get_entry(entry_id)
+    if entry is None:
+        raise HTTPException(status_code=404, detail="Entry not found")
+    entry_text = "\n".join(entry.get(field, "") for field in ['work', 'struggle, intention'])
+
+    try:
+        # test will fail if you use from ... import analyze_journal_entry, probably issues with patching
+        analysis = await llm_service.analyze_journal_entry(entry_id, entry_text)
+    except NotImplementedError:
+        raise HTTPException(status_code=501, detail="LLM analysis not yet implemented") from None
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}") from None
+
+    return analysis
