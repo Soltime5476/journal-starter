@@ -9,14 +9,6 @@ from fastapi import FastAPI
 
 from api.routers.journal_router import router as journal_router
 
-# TODO: Setup basic console logging
-# Hint: Use logging.basicConfig() with level=logging.INFO
-# Steps:
-# 1. Configure logging with basicConfig()
-# 2. Set level to logging.INFO
-# 3. Add console handler
-# 4. Test by adding a log message when the app starts
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 handler = logging.StreamHandler()
@@ -26,6 +18,5 @@ fmt = "\033[34mCUSTOM\033[0m:   {asctime}  {name} - {message} ({filename}:{linen
 formatter = logging.Formatter(fmt, iso_8601, style='{')
 handler.setFormatter(formatter)
 logger.info("App is starting...")
-
 app = FastAPI(title="Journal API", description="A simple journal API for tracking daily work, struggles, and intentions")
 app.include_router(journal_router)

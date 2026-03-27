@@ -25,12 +25,6 @@ async def analyze_journal_entry(entry_id: str, entry_text: str) -> dict:
             - summary: 2 sentence summary of the entry
             - topics: list of 2-4 key topics mentioned
             - created_at: timestamp when the analysis was created
-
-    TODO: Implement this function using your chosen LLM provider.
-    See the Learn to Cloud curriculum for guidance on:
-    - Setting up your LLM API client
-    - Crafting effective prompts
-    - Handling structured JSON output
     """
 
     BASE_URL = os.getenv("OPENAI_BASE_URL", "https://models.inference.ai.azure.com")
