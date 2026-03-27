@@ -46,26 +46,6 @@ async def get_all_entries(entry_service: EntryService = Depends(get_entry_servic
 
 @router.get("/entries/{entry_id}")
 async def get_entry(entry_id: str, entry_service: EntryService = Depends(get_entry_service)):
-    """
-    TODO: Implement this endpoint to return a single journal entry by ID
-
-    Steps to implement:
-    1. Use entry_service.get_entry(entry_id) to fetch the entry
-    2. If entry is None, raise HTTPException with status_code=404
-    3. Return the entry directly (not wrapped in a dict)
-
-    Example response (status 200):
-    {
-        "id": "uuid-string",
-        "work": "...",
-        "struggle": "...",
-        "intention": "...",
-        "created_at": "...",
-        "updated_at": "..."
-    }
-
-    Hint: Check the update_entry endpoint for similar patterns
-    """
     result = await entry_service.get_entry(entry_id)
     if not result:
         raise HTTPException(status_code=404, detail="Entry not found")
@@ -77,32 +57,16 @@ async def update_entry(entry_id: str, entry_update: dict, entry_service: EntrySe
     """Update a journal entry"""
     result = await entry_service.update_entry(entry_id, entry_update)
     if not result:
-
         raise HTTPException(status_code=404, detail="Entry not found")
 
     return result
 
-# TODO: Implement DELETE /entries/{entry_id} endpoint to remove a specific entry
-# Return 404 if entry not found
 @router.delete("/entries/{entry_id}")
 async def delete_entry(entry_id: str, entry_service: EntryService = Depends(get_entry_service)):
-    """
-    TODO: Implement this endpoint to delete a specific journal entry
-
-    Steps to implement:
-    1. Use entry_service.get_entry(entry_id) to check if entry exists
-    2. If entry is None, raise HTTPException with status_code=404
-    3. Use entry_service.delete_entry(entry_id) to delete the entry
-    4. Return a success response (status 200)
-
-    Example response (status 200):
-    {"detail": "Entry deleted successfully"}
-
-    Hint: Look at how the update_entry endpoint checks for existence
-    """
     entry = await entry_service.get_entry(entry_id)
     if entry is None:
         raise HTTPException(status_code=404, detail="Entry not found")
+    
     await entry_service.delete_entry(entry_id)
     return {"detail": f"Entry {entry_id} deleted sucessfully"}
 
@@ -127,24 +91,6 @@ async def analyze_entry(entry_id: str, entry_service: EntryService = Depends(get
         "topics": ["topic1", "topic2", "topic3"],
         "created_at": "timestamp"
     }
-
-    TODO: Implement this endpoint. Steps:
-    1. Fetch the entry from database using entry_service.get_entry(entry_id)
-    2. Return 404 if entry not found
-    3. Combine work + struggle + intention into text
-    4. Call llm_service.analyze_journal_entry(entry_id, entry_text)
-    5. Return the analysis result
-    6. Wrap the LLM call in try/except to handle errors gracefully:
-       - Catch NotImplementedError and return 501
-       - Catch other exceptions and return 500 with a helpful detail message
-
-    Example error handling:
-        try:
-            analysis = await analyze_journal_entry(entry_id, entry_text)
-        except NotImplementedError:
-            raise HTTPException(status_code=501, detail="LLM analysis not yet implemented")
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
     """
     entry = await entry_service.get_entry(entry_id)
     if entry is None:
@@ -154,8 +100,6 @@ async def analyze_entry(entry_id: str, entry_service: EntryService = Depends(get
     try:
         # test will fail if you use from ... import analyze_journal_entry, probably issues with patching
         analysis = await llm_service.analyze_journal_entry(entry_id, entry_text)
-    except NotImplementedError:
-        raise HTTPException(status_code=501, detail="LLM analysis not yet implemented") from None
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}") from None
 
