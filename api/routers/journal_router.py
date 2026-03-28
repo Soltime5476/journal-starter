@@ -66,7 +66,7 @@ async def delete_entry(entry_id: str, entry_service: EntryService = Depends(get_
     entry = await entry_service.get_entry(entry_id)
     if entry is None:
         raise HTTPException(status_code=404, detail="Entry not found")
-    
+
     await entry_service.delete_entry(entry_id)
     return {"detail": f"Entry {entry_id} deleted sucessfully"}
 
