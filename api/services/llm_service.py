@@ -89,7 +89,8 @@ async def analyze_journal_entry(
         ],
     )
 
-    ai_analysis_json = json.loads(ai_response.choices[0].message.content)
+    ai_raw_msg = ai_response.choices[0].message.content
+    ai_analysis_json = json.loads(ai_raw_msg)  # type: ignore
     analysed_sentiment = ai_analysis_json.get("sentiment", "N/A")
     analysed_summary = ai_analysis_json.get("summary", "N/A")
     analysed_topics = ai_analysis_json.get("topics", [])
