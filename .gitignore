@@ -170,4 +170,17 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+# ruff cache
 .ruff_cache
+
+# vscode 
+.vscode
+
+# terraform files
+infra/.terraform/
+infra/.terraform.lock.hcl
+infra/terraform.tfstate
+infra/terraform.tfvars
+
+# archive files
+archive
