@@ -1,0 +1,12 @@
+.devcontainer/
+.git/
+tests/
+infra/
+archive/
+docs/
+scripts/
+start.sh
+pytest.ini
+database_setup.sql
+Dockerfile
+README.md

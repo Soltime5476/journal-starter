@@ -1,0 +1,21 @@
+name: Build docker image stub # and push later
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build Docker image
+        run: docker build -t myapp:${{ github.sha }} .
+    
+    #   don't push docker image to registry now 
+    #   - name: Login to Registry
+    #     run: echo ${{ secrets.REGISTRY_PASSWORD }} | docker login -u ${{ secrets.REGISTRY_USER }} --password-stdin
+      
+    #   - name: Push image
+    #     run: docker push myapp:${{ github.sha }}
